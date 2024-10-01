@@ -1,3 +1,6 @@
+#GAME INPUT
+
+
 import random
 
 def draw_board(board):
@@ -140,3 +143,154 @@ while True:
         break
 
 print("Thank you for playing!")
+
+
+
+
+#OUTPUT
+
+Welcome to Tic Tac Toe!
+Do you want to be X or O?  X
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+What is your next move? (0-8):  0
+   |   |
+ X |   |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+   |   | O
+   |   |
+What is your next move? (0-8):  4
+   |   |
+ X |   |  
+   |   |
+-----------
+   |   |
+   | X |  
+   |   |
+-----------
+   |   |
+ O |   | O
+   |   |
+What is your next move? (0-8):  7
+   |   |
+ X | O |  
+   |   |
+-----------
+   |   |
+   | X |  
+   |   |
+-----------
+   |   |
+ O | X | O
+   |   |
+What is your next move? (0-8):  2
+   |   |
+ X | O | X
+   |   |
+-----------
+   |   |
+   | X | O
+   |   |
+-----------
+   |   |
+ O | X | O
+   |   |
+What is your next move? (0-8):  3
+   |   |
+ X | O | X
+   |   |
+-----------
+   |   |
+ X | X | O
+   |   |
+-----------
+   |   |
+ O | X | O
+   |   |
+It's a tie!
+
+Current Scores:
+Player: 0, Computer: 0, Ties: 1
+Do you want to play again? (yes/no):  yes
+Do you want to be X or O?  x
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+What is your next move? (0-8):  0
+   |   |
+ X | O |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+-----------
+   |   |
+   |   |  
+   |   |
+What is your next move? (0-8):  4
+   |   |
+ X | O |  
+   |   |
+-----------
+   |   |
+   | X |  
+   |   |
+-----------
+   |   |
+   |   | O
+   |   |
+What is your next move? (0-8):  6
+   |   |
+ X | O | O
+   |   |
+-----------
+   |   |
+   | X |  
+   |   |
+-----------
+   |   |
+ X |   | O
+   |   |
+What is your next move? (0-8):  3
+   |   |
+ X | O | O
+   |   |
+-----------
+   |   |
+ X | X |  
+   |   |
+-----------
+   |   |
+ X |   | O
+   |   |
+Congratulations! You have won!
+
+Current Scores:
+Player: 1, Computer: 0, Ties: 1
+Do you want to play again? (yes/no): 
+↑↓ for history. Search history with c-↑/c-↓
+
