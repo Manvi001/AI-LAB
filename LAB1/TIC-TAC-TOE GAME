@@ -1,0 +1,142 @@
+import random
+
+def draw_board(board):
+    """Prints the Tic Tac Toe board."""
+    print('   |   |')
+    print(' ' + board[0] + ' | ' + board[1] + ' | ' + board[2])
+    print('   |   |')
+    print('-----------')
+    print('   |   |')
+    print(' ' + board[3] + ' | ' + board[4] + ' | ' + board[5])                              
+    print('   |   |')
+    print('-----------')
+    print('   |   |')
+    print(' ' + board[6] + ' | ' + board[7] + ' | ' + board[8])
+    print('   |   |')
+
+def input_player_letter():
+    """Lets the player choose X or O."""
+    letter = ''
+    while letter not in ['X', 'O']:
+        letter = input("Do you want to be X or O? ").upper()
+    return letter
+
+def who_goes_first():
+    """Randomly decides who goes first."""
+    return 'computer' if random.randint(0, 1) == 0 else 'player'
+
+def make_move(board, letter, move):
+    """Places the player's letter on the board."""
+    board[move] = letter
+
+def is_winner(board, letter):
+    """Checks if the specified letter has won."""
+    winning_combinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
+        [0, 4, 8], [2, 4, 6]               # Diagonals
+    ]
+    return any(all(board[i] == letter for i in combo) for combo in winning_combinations)
+
+def is_board_full(board):
+    """Checks if the board is full."""
+    return all(space != ' ' for space in board)
+
+def get_player_move(board):
+    """Gets the player's move."""
+    move = -1
+    while move not in range(9) or board[move] != ' ':
+        try:
+            move = int(input("What is your next move? (0-8): "))
+        except ValueError:
+            print("Invalid input. Please enter a number between 0 and 8.")
+            continue
+    return move
+
+def get_computer_move(board, computer_letter, player_letter):
+    """Determines the computer's move using a basic strategy."""
+    
+    # Check for winning move
+    for i in range(9):
+        if board[i] == ' ':
+            board[i] = computer_letter
+            if is_winner(board, computer_letter):
+                return i
+            board[i] = ' '  # Undo move
+
+    # Block player's winning move
+    for i in range(9):
+        if board[i] == ' ':
+            board[i] = player_letter
+            if is_winner(board, player_letter):
+                return i
+            board[i] = ' '  # Undo move
+
+    # If no immediate win or block, choose randomly
+    available_moves = [i for i in range(9) if board[i] == ' ']
+    return random.choice(available_moves) if available_moves else None
+
+# Main Game Loop
+print("Welcome to Tic Tac Toe!")
+
+# Initialize scores
+player_score = 0
+computer_score = 0
+tie_score = 0
+
+while True:
+    # Initialize the game
+    board = [' '] * 9
+    player_letter = input_player_letter()
+    computer_letter = 'O' if player_letter == 'X' else 'X'
+    
+    turn = who_goes_first()
+    
+    while True:
+        if turn == 'player':
+            draw_board(board)
+            move = get_player_move(board)
+            make_move(board, player_letter, move)
+            
+            if is_winner(board, player_letter):
+                draw_board(board)
+                print("Congratulations! You have won!")
+                player_score += 1
+                break
+            
+            if is_board_full(board):
+                draw_board(board)
+                print("It's a tie!")
+                tie_score += 1
+                break
+            
+            turn = 'computer'
+        else:
+            move = get_computer_move(board, computer_letter, player_letter)
+            make_move(board, computer_letter, move)
+            
+            if is_winner(board, computer_letter):
+                draw_board(board)
+                print("The computer has won! You lose.")
+                computer_score += 1
+                break
+            
+            if is_board_full(board):
+                draw_board(board)
+                print("It's a tie!")
+                tie_score += 1
+                break
+            
+            turn = 'player'
+    
+    # Print current scores after each game round
+    print("\nCurrent Scores:")
+    print(f"Player: {player_score}, Computer: {computer_score}, Ties: {tie_score}")
+    
+    # Ask to play again; if yes, continue to next round without resetting scores.
+    play_again = input("Do you want to play again? (yes/no): ").lower()
+    
+    if play_again != 'yes':
+        break
+
+print("Thank you for playing!")
