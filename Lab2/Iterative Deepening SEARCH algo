@@ -1,0 +1,89 @@
+class Graph:
+    def __init__(self):
+        self.graph = {}
+
+    def add_edge(self, u, v):
+        """Add an edge from node u to node v."""
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def DLS(self, src, target, limit):
+        """
+        Depth-Limited Search (DLS): Search for the target starting from the src node,
+        but stop the recursion once the depth limit is reached.
+        """
+        if src == target:
+            return True  # Target found
+
+        if limit <= 0:
+            return False  # Limit reached, stop recursion
+
+        # Recur for all adjacent vertices of the src node
+        if src in self.graph:
+            for neighbor in self.graph[src]:
+                if self.DLS(neighbor, target, limit - 1):
+                    return True
+
+        return False  # Target not found within this depth limit
+
+    def IDDFS(self, src, target, max_depth):
+        """
+        Iterative Deepening Depth-First Search (IDDFS):
+        Perform DLS for increasing limits (from 0 to max_depth).
+        """
+        for depth in range(max_depth + 1):
+            print(f"Checking with depth limit: {depth}")
+            if self.DLS(src, target, depth):
+                print(f"Target {target} found at depth level: {depth}")
+                return True  # Target found within depth limit
+        return False  # Target not reachable within max_depth
+
+
+# Main function to get user input and execute IDDFS
+def main():
+    # Create an instance of the graph
+    g = Graph()
+
+    # Take user input for the graph structure
+    num_edges = int(input("Enter the number of edges in the graph: "))
+    print("Enter each edge as a pair of space-separated integers (source, destination):")
+    for _ in range(num_edges):
+        u, v = map(int, input().split())  # User inputs edges as two space-separated integers
+        g.add_edge(u, v)
+
+    # Take user input for the source, target, and maximum depth
+    src = int(input("Enter the source node: "))
+    target = int(input("Enter the target node: "))
+    max_depth = int(input("Enter the maximum depth limit: "))
+
+    # Perform the Iterative Deepening Depth-First Search (IDDFS)
+    if g.IDDFS(src, target, max_depth):
+        print(f"\nTarget {target} is reachable from source {src} within depth {max_depth}")
+    else:
+        print(f"\nTarget {target} is NOT reachable from source {src} within depth {max_depth}")
+
+# Run the main function
+if __name__ == "__main__":
+    main()
+
+
+//output
+
+Enter the number of edges in the graph: 6
+Enter each edge as a pair of space-separated integers (source, destination):
+0 1
+0 2
+1 3
+1 4
+2 5
+2 6
+Enter the source node: 0 
+Enter the target node: 5
+Enter the maximum depth limit: 3
+Checking with depth limit: 0
+Checking with depth limit: 1
+Checking with depth limit: 2
+Target 5 found at depth level: 2
+
+Target 5 is reachable from source 0 within depth 3
