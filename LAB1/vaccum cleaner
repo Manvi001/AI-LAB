@@ -1,0 +1,66 @@
+def vacuum_cleaner():
+    # Initial states of the rooms, asking the user for input
+    rooms = {
+        'A': input("Is room A dirty or clean? (dirty/clean): ").strip().lower(),
+        'B': input("Is room B dirty or clean? (dirty/clean): ").strip().lower(),
+        'C': input("Is room C dirty or clean? (dirty/clean): ").strip().lower()
+    }
+
+    # Get the initial location of the vacuum cleaner
+    current_location = input("Where is the vacuum cleaner now? (A/B/C): ").strip().upper()
+
+    # Make sure the input is valid
+    if current_location not in rooms:
+        print("Invalid location! Please choose A, B, or C.")
+        return
+
+    # Keep cleaning until all rooms are clean or the user decides to stop
+    while True:
+        # Check if the current room is dirty or clean
+        if rooms[current_location] == 'dirty':
+            print(f"The room {current_location} is dirty. Vacuuming now...")
+            rooms[current_location] = 'clean'  # Mark the room as clean after vacuuming
+        else:
+            print(f"The room {current_location} is already clean. No need to vacuum here.")
+
+        # Show the status of all the rooms
+        print("\nCurrent room status:")
+        for room, status in rooms.items():
+            print(f"Room {room} is {status}.")
+
+        # Check if all rooms are clean
+        if all(status == 'clean' for status in rooms.values()):
+            print("\nGreat! All rooms are clean now. Job done!")
+            break
+
+        # Ask where to go next, or let the user stop the program
+        next_room = input("\nWhich room should the vacuum cleaner move to next? (A/B/C) or type 'exit' to stop: ").strip().upper()
+
+        # If the user wants to exit
+        if next_room == 'EXIT':
+            print("Okay, stopping the vacuum cleaner. Goodbye!")
+            break
+
+        # Validate the next room input
+        if next_room not in rooms:
+            print("Invalid room choice! Please enter A, B, or C.")
+        else:
+            current_location = next_room  # Update the current location to the next room
+
+# Run the vacuum cleaner program
+vacuum_cleaner()
+
+
+
+  // output
+
+Is room A dirty or clean? (dirty/clean): dirty
+Is room B dirty or clean? (dirty/clean): dirty
+Is room C dirty or clean? (dirty/clean): clean
+Where is the vacuum cleaner now? (A/B/C): A
+The room A is dirty. Vacuuming now...
+
+Current room status:
+Room A is clean.
+Room B is dirty.
+Room C is clean.
