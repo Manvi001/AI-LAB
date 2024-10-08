@@ -1,0 +1,209 @@
+from collections import deque
+
+# Function to print the puzzle
+def print_puzzle(puzzle):
+    for row in puzzle:
+        print(' '.join(str(x) if x != 0 else '_' for x in row))
+    print()
+
+# Function to find the position of the blank tile (0)
+def find_blank(puzzle):
+    for i in range(3):
+        for j in range(3):
+            if puzzle[i][j] == 0:
+                return i, j
+
+# Function to generate all possible states by moving the blank tile
+def get_neighbors(puzzle):
+    neighbors = []
+    blank_x, blank_y = find_blank(puzzle)
+    moves = [(0, 1), (0, -1), (1, 0), (-1, 0)]  # Right, Left, Down, Up
+
+    for dx, dy in moves:
+        new_x = blank_x + dx
+        new_y = blank_y + dy
+        if 0 <= new_x < 3 and 0 <= new_y < 3:  # Check if within bounds
+            # Create a new state by swapping the blank tile
+            new_puzzle = [row[:] for row in puzzle]  # Make a copy of the current puzzle
+            new_puzzle[blank_x][blank_y], new_puzzle[new_x][new_y] = new_puzzle[new_x][new_y], new_puzzle[blank_x][blank_y]
+            neighbors.append(new_puzzle)
+    return neighbors
+
+# BFS function to solve the puzzle
+def bfs(start, goal):
+    queue = deque([start])  # Queue for BFS
+    visited = set()  # Set to track visited states
+    visited.add(tuple(map(tuple, start)))  # Add initial state to visited
+
+    parent_map = {tuple(map(tuple, start)): None}  # To track the path
+
+    while queue:
+        current = queue.popleft()  # Get the current state
+
+        if current == goal:  # Check if we reached the goal
+            return current, parent_map
+
+        for neighbor in get_neighbors(current):  # Explore neighbors
+            neighbor_tuple = tuple(map(tuple, neighbor))  # Convert to tuple for set
+            if neighbor_tuple not in visited:
+                visited.add(neighbor_tuple)
+                queue.append(neighbor)
+                parent_map[neighbor_tuple] = tuple(map(tuple, current))  # Track parent state
+
+    return None, parent_map  # Return None if no solution is found
+
+# Function to backtrack and get the path from start to goal
+def get_solution_path(start, goal, parent_map):
+    path = []
+    current = tuple(map(tuple, goal))
+    while current is not None:
+        path.append(current)
+        current = parent_map[current]
+    return path[::-1]  # Reverse the path to get it from start to goal
+
+# Main function to run the puzzle solver
+def solve_8_puzzle():
+    print("Enter the starting state of the 8-puzzle (use 0 for the blank space):")
+    start_state = []
+    for i in range(3):
+        row = input(f"Enter row {i + 1} (3 numbers separated by space): ")
+        start_state.append([int(x) for x in row.split()])
+
+    goal_state = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 0]
+    ]
+
+    print("Starting puzzle:")
+    print_puzzle(start_state)
+
+    solution, parent_map = bfs(start_state, goal_state)
+
+    if solution:
+        print("Solution found:")
+        print_puzzle(solution)
+
+        # Ask the user if they want to see the transition states
+        show_transition = input("Do you want to see the transition states from start to goal? (yes/no): ").strip().lower()
+        if show_transition == 'yes':
+            path = get_solution_path(start_state, solution, parent_map)
+            print("Transition states:")
+            for state in path:
+                print_puzzle(state)
+    else:
+        print("No solution found.")
+
+# Run the solver
+solve_8_puzzle()
+
+
+//output
+
+Enter the starting state of the 8-puzzle (use 0 for the blank space):
+Enter row 1 (3 numbers separated by space): 0 1 2
+Enter row 2 (3 numbers separated by space): 3 4 5
+Enter row 3 (3 numbers separated by space): 6 7 8
+Starting puzzle:
+_ 1 2
+3 4 5
+6 7 8
+
+Solution found:
+1 2 3
+4 5 6
+7 8 _
+
+Do you want to see the transition states from start to goal? (yes/no): yes
+Transition states:
+_ 1 2
+3 4 5
+6 7 8
+
+1 _ 2
+3 4 5
+6 7 8
+
+1 4 2
+3 _ 5
+6 7 8
+
+1 4 2
+_ 3 5
+6 7 8
+
+1 4 2
+6 3 5
+_ 7 8
+
+1 4 2
+6 3 5
+7 _ 8
+
+1 4 2
+6 3 5
+7 8 _
+
+1 4 2
+6 3 _
+7 8 5
+
+1 4 2
+6 _ 3
+7 8 5
+
+1 4 2
+_ 6 3
+7 8 5
+
+1 4 2
+7 6 3
+_ 8 5
+
+1 4 2
+7 6 3
+8 _ 5
+
+1 4 2
+7 _ 3
+8 6 5
+
+1 _ 2
+7 4 3
+8 6 5
+
+1 2 _
+7 4 3
+8 6 5
+
+1 2 3
+7 4 _
+8 6 5
+
+1 2 3
+7 4 5
+8 6 _
+
+1 2 3
+7 4 5
+8 _ 6
+
+1 2 3
+7 4 5
+_ 8 6
+
+1 2 3
+_ 4 5
+7 8 6
+
+1 2 3
+4 _ 5
+7 8 6
+
+1 2 3
+4 5 _
+7 8 6
+
+1 2 3
+4 5 6
+7 8 _
