@@ -1,18 +1,16 @@
-import random
 
-# Function to calculate number of conflicts in the state
 def calculate_conflicts(state):
     conflicts = 0
     n = len(state)
     
     for i in range(n):
         for j in range(i + 1, n):
-            # Check for row and diagonal conflicts
+           
             if state[i] == state[j] or abs(state[i] - state[j]) == abs(i - j):
                 conflicts += 1
     return conflicts
 
-# Function to generate the neighbors of the current state
+
 def generate_neighbors(state):
     neighbors = []
     n = len(state)
@@ -20,14 +18,14 @@ def generate_neighbors(state):
     for col in range(n):
         for row in range(n):
             if row != state[col]:
-                # Create a new state by moving the queen to a different row
+              
                 new_state = list(state)
                 new_state[col] = row
                 neighbors.append(new_state)
     
     return neighbors
 
-# Function to print the board with queens' positions
+
 def print_board(state):
     n = len(state)
     for row in range(n):
@@ -40,8 +38,8 @@ def print_board(state):
         print(line)
     print()
 
-# Hill climbing algorithm for the 4-Queens problem
-def hill_climbing_4_queens(initial_state, max_iterations=1000):
+
+def hill_climbing_4_queens(initial_state, max_iterations):
     current_state = initial_state
     current_value = calculate_conflicts(current_state)
     
@@ -50,19 +48,15 @@ def hill_climbing_4_queens(initial_state, max_iterations=1000):
     
     iteration = 0  # Track the number of iterations
     for iteration in range(max_iterations):
-        # Generate neighbors
+       
         neighbors = generate_neighbors(current_state)
-        
-        # Find the best neighbor (steepest ascent)
         next_state = min(neighbors, key=calculate_conflicts)
         next_value = calculate_conflicts(next_state)
         
-        # If the neighbor is better, move to that neighbor
         if next_value < current_value:
             current_state = next_state
             current_value = next_value
         else:
-            # Local optimum reached
             break
     
     print("Final Board:")
@@ -70,7 +64,6 @@ def hill_climbing_4_queens(initial_state, max_iterations=1000):
     
     return current_state, current_value, iteration + 1  # Return iteration count
 
-# Taking user input for initial positions of the queens
 try:
     initial_state = []
     print("Enter the initial row positions for each queen (0 to 3) for each column (total 4 queens):")
@@ -84,7 +77,6 @@ try:
     
     max_iterations = int(input("Enter the maximum number of iterations: "))
 
-    # Run hill climbing algorithm for 4 queens
     best_state, best_value, iterations_taken = hill_climbing_4_queens(initial_state, max_iterations)
     
     print(f"\nBest Solution: {best_state}, Conflicts: {best_value}")
