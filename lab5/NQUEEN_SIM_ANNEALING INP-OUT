@@ -1,0 +1,102 @@
+import random
+import math
+
+
+def eval_function(state):
+    n = len(state)
+    attacks = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+           
+            if state[i] == state[j] or abs(state[i] - state[j]) == abs(i - j):
+                attacks += 1
+    return -attacks  
+
+
+def random_neighbor(state):
+    n = len(state)
+    new_state = state[:]
+    col = random.randint(0, n - 1)  
+    new_row = random.choice([i for i in range(n) if i != state[col]])   
+    return new_state
+
+
+def schedule(t):
+    #return max(0.01, min(1, 1 - math.log(t + 1) * 0.001))  # Adjust normal decay factor as needed (gives large iterations)
+    return max(0.01, min(1, 1 - 0.005 * t))  # Faster decay
+
+
+# Simulated Annealing function
+def simulated_annealing(state, schedule, eval_function, random_neighbor, max_iterations=10000):
+    for t in range(1, max_iterations + 1):
+        T = schedule(t)
+        if T == 0:
+            return state, t
+
+        candidate = random_neighbor(state)
+        E = eval_function(candidate) - eval_function(state)
+
+        if E > 0:
+            state = candidate
+        else:
+            #prob = math.exp(E / T) normal prob for large iterations
+            prob = math.exp(E / (T * 2))  # Decrease the probability of accepting worse solutions
+            if random.random() < prob:
+                state = candidate
+
+       
+        if eval_function(state) == 0:
+            print(f"Global maximum (no attacks) found at iteration {t}")
+            return state, t
+
+    print(f"Reached local maximum/minimum at iteration {max_iterations}")
+    return state, max_iterations
+
+
+def solve_n_queens(n):
+    
+    initial_state = [random.randint(0, n - 1) for _ in range(n)]
+    result, iterations = simulated_annealing(initial_state, schedule, eval_function, random_neighbor)
+    return result, iterations
+
+
+def print_board(state):
+    n = len(state)
+    for row in range(n):
+        line = ""
+        for col in range(n):
+            if state[col] == row:
+                line += "Q "
+            else:
+                line += ". "
+        print(line)
+    print("\n")
+
+N = int(input("Enter the number of queens (N): "))  
+solution, iterations = solve_n_queens(N)
+print(f"Solution for {N} queens found in {iterations} iterations:")
+print_board(solution)
+print("Final evaluation (objective function value):", eval_function(solution))
+
+
+
+
+
+
+
+OUTPUT:
+
+Enter the number of queens (N): 8
+Global maximum (no attacks) found at iteration 902
+Solution for 8 queens found in 902 iterations:
+. . . . Q . . . 
+. Q . . . . . . 
+. . . Q . . . . 
+. . . . . Q . . 
+. . . . . . . Q 
+. . Q . . . . . 
+Q . . . . . . . 
+. . . . . . Q . 
+
+
+Final evaluation (objective function value): 0
