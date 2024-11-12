@@ -1,0 +1,5 @@
+	
+Lab Programs- 12/11/2024
+2. Create a knowledge base using propositional logic and show that the given query entails the knowledge base or not.
+i.For given KB and Query you should write truth table values to demonstrate whether the given query entails KB or not.
+ii. Implementation of truth-table enumeration algorithm for deciding propositional entailment.
