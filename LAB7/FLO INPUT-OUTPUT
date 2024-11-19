@@ -1,4 +1,5 @@
-#PROGRAM
+*******************************#PROGRAM*************************************
+
 
 def validate_and_transform(sentence):
     # Normalize the sentence for processing
@@ -92,7 +93,7 @@ print(validate_and_transform(sentence))
 
 
 
-#OUTPUT:
+*********************#OUTPUT:************************************************
 
 sentence 1:
 
