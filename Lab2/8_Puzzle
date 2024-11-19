@@ -1,3 +1,6 @@
+*******************************#PROGRAM*************************************
+
+
 from collections import deque
 
 # Function to print the puzzle
@@ -98,7 +101,9 @@ def solve_8_puzzle():
 solve_8_puzzle()
 
 
-//output
+************************output*****************
+
+
 
 Enter the starting state of the 8-puzzle (use 0 for the blank space):
 Enter row 1 (3 numbers separated by space): 0 1 2
