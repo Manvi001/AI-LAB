@@ -1,3 +1,5 @@
+*******************************#PROGRAM*************************************
+
 class Graph:
     def __init__(self):
         self.graph = {}
@@ -68,7 +70,7 @@ if __name__ == "__main__":
     main()
 
 
-//output
+**********************output********************
 
 Enter the number of edges in the graph: 6
 Enter each edge as a pair of space-separated integers (source, destination):
