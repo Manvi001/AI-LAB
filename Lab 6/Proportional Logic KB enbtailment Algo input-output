@@ -1,3 +1,5 @@
+***************************PROGRAM***************************
+
 from itertools import product
 def implies(p, q):
     return not p or q
@@ -39,7 +41,8 @@ print("\nDoes KB entail the query?", result)
 
 
 
-output:
+************************output*************************
+
 
 Enter the symbols (separated by commas): A,B,C
 Enter the knowledge base using operators (e.g., 'implies(m["A"], m["B"]) and m["C"]'): implies(m["A"],m["B"]) and m["C"]
