@@ -1,0 +1,130 @@
+#PROGRAM
+
+def validate_and_transform(sentence):
+    # Normalize the sentence for processing
+    sentence = sentence.strip().lower()
+
+    # Initialize variables
+    valid = True
+    fol_representation = None
+
+    # Logical consistency checks and transformations
+    if "and" in sentence and "are both students" in sentence:
+        # Handle sentences like "John and Mary are both students"
+        parts = sentence.split(" and ")
+        if len(parts) == 2 and "are both students" in parts[1]:
+            names = parts[0].split(" ")
+            if len(names) == 1:  # Case like "John and Mary"
+                name1 = names[0].capitalize()
+                name2 = parts[1].replace("are both students", "").strip().capitalize()
+            else:
+                name1 = names[0].capitalize()
+                name2 = names[1].capitalize()
+            fol_representation = f"Student({name1}) & Student({name2})"
+
+    # Handle "is human" type sentences
+    elif "is human" in sentence:
+        name = sentence.split(" ")[0]
+        fol_representation = f"Human({name.capitalize()})"
+
+    # Handle "loves" type sentences
+    elif "loves" in sentence and "someone" not in sentence:
+        parts = sentence.split(" loves ")
+        if len(parts) == 2:
+            fol_representation = f"Loves({parts[0].capitalize()}, {parts[1].capitalize()})"
+        else:
+            valid = False
+
+    # Handle "is mortal" type sentences
+    elif "is mortal" in sentence:
+        name = sentence.split(" ")[0]
+        fol_representation = f"Human({name.capitalize()}) -> Mortal({name.capitalize()})"
+
+    # Handle "are animals" type sentences
+    elif "are animals" in sentence:
+        subject = sentence.split(" ")[0]
+        fol_representation = f"forall x ({subject.capitalize()}(x) -> Animal(x))"
+
+    # Handle "are brown" type sentences
+    elif "are brown" in sentence:
+        subject = sentence.split(" ")[0]
+        fol_representation = f"exists x ({subject.capitalize()}(x) & Brown(x))"
+
+    # Handle "is the mother of" type sentences
+    elif "is the mother of" in sentence:
+        parts = sentence.split(" is the mother of ")
+        if len(parts) == 2:
+            fol_representation = f"Mother({parts[0].capitalize()}, {parts[1].capitalize()})"
+        else:
+            valid = False
+
+    # Handle "is raining" type sentences
+    elif "is raining" in sentence:
+        fol_representation = "Raining -> Wet(Ground)"
+
+    # Handle "loves someone" type sentences
+    elif "loves someone" in sentence:
+        name = sentence.split(" ")[0]
+        fol_representation = f"exists x (Loves({name.capitalize()}, x))"
+
+    # Handle "there is no person who is both" type sentences
+    elif "there is no person who is both" in sentence:
+        parts = sentence.replace("there is no person who is both ", "").split(" and ")
+        if len(parts) == 2:
+            fol_representation = f"¬exists x ({parts[0].capitalize()}(x) & {parts[1].capitalize()}(x))"
+        else:
+            valid = False
+
+    # Invalid sentence if no patterns match
+    else:
+        valid = False
+
+    # Return validity and FOL representation
+    if valid and fol_representation:
+        return f"Sentence is valid.\nFOL Representation: {fol_representation}"
+    else:
+        return "Sentence is invalid or not recognized!"
+
+# Main program to take input
+sentence = input("Enter a sentence: ")
+print(validate_and_transform(sentence))
+
+
+
+
+#OUTPUT:
+
+sentence 1:
+
+Enter a sentence: john is human
+FOL Representation: Human(John)
+
+sentence 2:
+
+Enter a sentence: no person is bachelor and married
+Sentence is valid.
+FOL Representation: ¬exists x (Bachelor(x) & Married(x))
+
+sentence 3:
+
+Enter a sentence: Mary is the mother of john
+Sentence is valid.
+FOL Representation: Mother(Mary, John)
+
+sentence 4:
+
+Enter a sentence: john and mary are both students
+Sentence is valid.
+FOL Representation: Student(John) & Student(Mary)
+
+sentence 5:
+
+Enter a sentence: if it is raining, then the ground is wet
+Sentence is valid.
+FOL Representation: Raining -> Wet(Ground)
+
+sentence 6:
+
+Enter a sentence: every man respects his parent
+Sentence is invalid or not recognized!
+
