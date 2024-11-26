@@ -1,0 +1,66 @@
+***********************PROGRAM*******************************
+
+
+def is_variable(term):
+    return isinstance(term, str) and term.islower()
+
+def unify_sentences(s1, s2, theta=None):
+    if theta is None:
+        theta = {}
+
+    if s1 == s2:
+        return theta
+    elif is_variable(s1):
+        return unify_variable(s1, s2, theta)
+    elif is_variable(s2):
+        return unify_variable(s2, s1, theta)
+    elif isinstance(s1, list) and isinstance(s2, list) and len(s1) == len(s2):
+        for a, b in zip(s1, s2):
+            theta = unify_sentences(a, b, theta)
+            if theta is None:
+                return None
+        return theta
+    else:
+        return None
+
+def unify_variable(var, value, theta):
+    if var in theta:
+        return unify_sentences(theta[var], value, theta)
+    elif value in theta:
+        return unify_sentences(var, theta[value], theta)
+    else:
+        theta[var] = value
+        return theta
+
+# Get input from the user
+def get_input(prompt):
+    return input(prompt)
+
+# Parse input into a list representation
+def parse_sentence(sentence):
+    return sentence.strip().split()
+
+# Main execution
+sentence1 = parse_sentence(get_input("Enter the first sentence (e.g., Parent john x): "))
+sentence2 = parse_sentence(get_input("Enter the second sentence (e.g., Parent john mary): "))
+
+result = unify_sentences(sentence1, sentence2)
+if result:
+    print("Substitution:", result)
+else:
+    print("Unification failed.")
+
+
+
+
+
+
+
+
+***********************OUTPUT*******************************
+
+
+Enter the first sentence (e.g., Parent john x): parent john x
+Enter the second sentence (e.g., Parent john mary): parent john mary
+Substitution: {'x': 'mary'}
+
